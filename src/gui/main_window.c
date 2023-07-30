@@ -1,26 +1,5 @@
 #include "../s21_3dviewer.h"
 
-static GtkWidget *create_main_window() {
-    GtkWidget *window;
-    GtkBuilder *builder;
-    GError *error = NULL;
-
-    builder = gtk_builder_new();
-    if (!gtk_builder_add_from_file(builder, "../src/gui/3dviewer.glade", &error)) {
-        g_critical("Не могу загрузить файл: %s", error->message);
-        g_error_free(error);
-    }
-    gtk_builder_connect_signals(builder, NULL);
-
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "Main"));
-    if (!window) {
-        g_critical("Ошибка при получении виджета окна");
-    }
-    g_object_unref(builder);
-
-    return window;
-}
-
 G_MODULE_EXPORT GtkWidget *create_open_file_window(
         GtkButton *button, GtkWidget *open_file_window) {
     gtk_widget_show(open_file_window);
@@ -28,27 +7,40 @@ G_MODULE_EXPORT GtkWidget *create_open_file_window(
     return open_file_window;
 }
 
-G_MODULE_EXPORT void change_to_scaling_mode (GtkButton *button) {
-    g_print("Here\n");
+static void signals_connect(GtkBuilder *builder) {
+    GPtrArray *data = g_ptr_array_new();
+    surfaces_t *surfaces = NULL;
+    work_mode_t *work_mode = NULL;
+    g_ptr_array_add(data, builder);
+    g_ptr_array_add(data, surfaces);
+    g_ptr_array_add(data, work_mode);
+
+    gtk_builder_connect_signals(builder, NULL);  // auto connect some signals
+
+    GtkFileChooser *chooser = (GtkFileChooser *)gtk_builder_get_object(builder, "File_chooser_widget");
+    g_signal_connect(chooser, "file_activated", G_CALLBACK(open_file), data);
+
 }
 
-G_MODULE_EXPORT void open_file(GtkFileChooser *chooser, GtkLabel *files_name_label) {
-    char *files_name = gtk_file_chooser_get_preview_filename(chooser);
-    FILE *file = fopen(files_name, "r");
-    printf("%s\n", files_name);
-    if(!file) {
-        printf(ERR_FILE_OPENING"\n");
-        gtk_label_set_label(files_name_label, ERR_FILE_OPENING);
-    } else {
-        gtk_label_set_label(files_name_label, files_name);
+static GtkWidget *create_main_window() {
+    GtkWidget *window;
+    GtkBuilder *builder;
+    GError *error = NULL;
 
+    builder = gtk_builder_new();
+    if (!gtk_builder_add_from_file(builder, GLADE_FILE, &error)) {
+        g_critical("Не могу загрузить файл: %s", error->message);
+        g_error_free(error);
     }
+    signals_connect(builder);
 
-    printf("Here\n");
-    fscanf(file, "%s\n", files_name);
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "Main"));
+    if (!window) {
+        g_critical("Ошибка при получении виджета окна");
+    }
+//    g_object_unref(builder);
 
-
-    fclose(file);
+    return window;
 }
 
 int main (int argc, char *argv[]) {
@@ -59,7 +51,7 @@ int main (int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
     window = create_main_window();
-    if (!gtk_css_provider_load_from_path(provider, "../src/gui/common.css", &error)) {
+    if (!gtk_css_provider_load_from_path(provider, CSS_FILE, &error)) {
         g_critical("Ошибка загрузки css стилей: %s", error->message);
     } else {
         gtk_style_context_add_provider_for_screen(
