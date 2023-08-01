@@ -1,6 +1,6 @@
 #include "../s21_3dviewer.h"
 
-static status_t get_col_points_and_surfaces(gchar *filename, int *col_point, int *col_surfaces) {
+static status_t get_col_points_and_surfaces(gchar *filename, unsigned int *col_point, unsigned int *col_surfaces) {
     status_t status = OK;
     *col_point = 0;
     *col_surfaces = 0;
@@ -31,27 +31,18 @@ static status_t get_col_points_and_surfaces(gchar *filename, int *col_point, int
     return status;
 }
 
-static int get_col_points_in_surface(gchar *str) {
-    int i = 0;
-    gchar *nstr = str++;
-    for (; strtod(str, &nstr) != 0 && str != nstr; ++i) {
-        str = nstr;
-    }
-    return i;
-}
-
-static status_t alloc_data(points_t *points, surfaces_t *surfaces) {
+static status_t alloc_data(obj_data_t *obj_data) {
     status_t status = OK;
-    points->points = NULL;
-    surfaces->surfaces = NULL;
+    obj_data->points = NULL;
+    obj_data->surfaces = NULL;
 
-    points->points = calloc(points->count_points, sizeof(point_t));
-    if (!points->points) {
+    obj_data->points = calloc(obj_data->count_points, sizeof(point_t));
+    if (!obj_data->points) {
         status = ALLOC_ERR;
     } else {
-        surfaces->surfaces = calloc(surfaces->count_surfaces, sizeof(points_t));
-        if (!surfaces->surfaces) {
-            free(points->points);
+        obj_data->surfaces = calloc(obj_data->count_surfaces, sizeof(surface_t));
+        if (!obj_data->surfaces) {
+            free(obj_data->points);
             status = ALLOC_ERR;
         }
     }
@@ -66,63 +57,49 @@ static void replace_symb(gchar *str, gchar replaceable, gchar replacing) {
 
 static status_t scan_point(gchar *str, point_t *point) {
     status_t status = OK;
-    if (sscanf(str, "v %lf %lf %lf", &point->x, &point->y, &point->z) != 3) {
+    if (sscanf(str, "v %f %f %f", &point->x, &point->y, &point->z) != 3) {
         status = FORMAT_FILE_ERR;
     }
     return status;
 }
 
-static status_t get_points (gchar *filename, points_t *points) {
+static status_t scan_surface(gchar *str, surface_t *surface) {
+    status_t status = OK;
+    gchar *start_str = str++;
+    gchar *nstr = str++;
+    for (; strtod(str, &nstr) != 0 && str != nstr; ++surface->count_points) {
+        str = nstr;
+    }
+    str = ++start_str;
+
+    surface->points = calloc(surface->count_points, sizeof(unsigned short));
+    for (int point_num = 0; point_num < surface->count_points; ++point_num) {
+        surface->points[point_num] = (unsigned short)strtod(str, &str) - 1;  // since the numbering is from 1
+    }
+    if (surface->count_points == 0) {
+        status = FORMAT_FILE_ERR;
+    }
+    return status;
+}
+
+static status_t get_obj_data (gchar *filename, obj_data_t *obj_data) {
     status_t status = OK;
     FILE *file = fopen(filename, "r");
     if (!file) {
         status = OPEN_FILE_ERR;
     }
 
-    if(status == OK) {
+    if (status == OK) {
         gchar *str = NULL;
         size_t n = 0;
-        for (size_t i = 0; status == OK && getline(&str, &n, file) != -1; ) {
+        for (int point_num = 0, surface_num = 0; status == OK && getline(&str, &n, file) != -1;) {
             if (str[0] == 'v') {
                 replace_symb(str, '.', ',');
-                status = scan_point(str, &points->points[i]);
-                ++i;
-            }
-        }
-        free(str);
-    }
-    fclose(file);
-    return status;
-}
-
-static status_t get_surfaces (gchar *filename, points_t points, surfaces_t *surfaces) {
-    status_t status = OK;
-    FILE *file = fopen(filename, "r");
-    if (!file) {
-        status = OPEN_FILE_ERR;
-    }
-
-    if (status == OK) {
-        gchar *str = NULL;
-        size_t n = 0;
-        for (int surf_num = 0; surf_num < surfaces->count_surfaces && getline(&str, &n, file) != -1; ++surf_num) {
-            if (str[0] == 'f') {
-                surfaces->surfaces[surf_num].count_points = get_col_points_in_surface(str);
-                surfaces->surfaces[surf_num].points = calloc(surfaces->surfaces[surf_num].count_points, sizeof(points_t));
-                if (!surfaces->surfaces[surf_num].points ) {
-                    status = ALLOC_ERR;
-                }
-
-                int surf_point_num = 0;
-                ++str;  // skip 'f'
-                gchar *nstr = str;
-                for (int point_num = 0; (point_num = (int)strtod(nstr, &str)) != -1 && str != nstr; ++point_num) {
-                    nstr = str;
-                    point_num--;  // since the numbering of points is from 1
-                    surfaces->surfaces[surf_num].points[surf_point_num].x = points.points[point_num].x;
-                    surfaces->surfaces[surf_num].points[surf_point_num].y = points.points[point_num].y;
-                    surfaces->surfaces[surf_num].points[surf_point_num].z = points.points[point_num].z;
-                }
+                status = scan_point(str, &obj_data->points[point_num]);
+                point_num++;
+            } else if (str[0] == 'f') {
+                status = scan_surface(str, &obj_data->surfaces[surface_num]);
+                surface_num++;
             }
         }
     }
@@ -130,19 +107,14 @@ static status_t get_surfaces (gchar *filename, points_t points, surfaces_t *surf
     return status;
 }
 
-status_t parse_file(gchar *filename, surfaces_t *surfaces) {
-    points_t points;
-    status_t status = get_col_points_and_surfaces(filename, &points.count_points, &surfaces->count_surfaces);
+status_t parse_file(gchar *filename,  obj_data_t *obj_data) {
+    status_t status = get_col_points_and_surfaces(filename, &obj_data->count_points, &obj_data->count_surfaces);
 
     if (status == OK) {
-        status = alloc_data(&points, surfaces);
+        status = alloc_data(obj_data);
     }
     if (status == OK) {
-        status = get_points(filename, &points);
-    }
-    if (status == OK) {
-        status = get_surfaces(filename, points, surfaces);
-        free(points.points);
+        status = get_obj_data(filename, obj_data);
     }
 
     return status;

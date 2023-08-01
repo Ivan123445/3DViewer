@@ -9,11 +9,11 @@ G_MODULE_EXPORT GtkWidget *create_open_file_window(
 
 static void signals_connect(GtkBuilder *builder) {
     GPtrArray *data = g_ptr_array_new();
-    surfaces_t *surfaces = NULL;
-    work_mode_t *work_mode = NULL;
+    obj_data_t *obj_data = calloc(1, sizeof(obj_data_t));
+//    work_mode_t *work_mode = NULL;
     g_ptr_array_add(data, builder);
-    g_ptr_array_add(data, surfaces);
-    g_ptr_array_add(data, work_mode);
+    g_ptr_array_add(data, obj_data);
+//    g_ptr_array_add(data, work_mode);
 
     gtk_builder_connect_signals(builder, NULL);  // auto connect some signals
 
