@@ -36,7 +36,7 @@ static status_t alloc_data(obj_data_t *obj_data) {
     obj_data->points = NULL;
     obj_data->surfaces = NULL;
 
-    obj_data->points = calloc(obj_data->count_points, sizeof(point_t));
+    obj_data->points = calloc(obj_data->count_points, sizeof(coordinates_t));
     if (!obj_data->points) {
         status = ALLOC_ERR;
     } else {
@@ -55,7 +55,7 @@ static void replace_symb(gchar *str, gchar replaceable, gchar replacing) {
     }
 }
 
-static status_t scan_point(gchar *str, point_t *point) {
+static status_t scan_point(gchar *str, coordinates_t *point) {
     status_t status = OK;
     if (sscanf(str, "v %f %f %f", &point->x, &point->y, &point->z) != 3) {
         status = FORMAT_FILE_ERR;
