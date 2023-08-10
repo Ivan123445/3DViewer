@@ -10,13 +10,19 @@ G_MODULE_EXPORT GtkWidget *create_open_file_window(
 static void signals_connect(GtkBuilder *builder) {
     GPtrArray *data = g_ptr_array_new();
     obj_data_t *obj_data = calloc(1, sizeof(obj_data_t));
+    gulong *signals_id = calloc(5, sizeof (gulong));
     work_mode_t *work_mode = calloc(1, sizeof(work_mode));
     *work_mode = INITIAL_WORK_MODE;
     g_ptr_array_add(data, builder);
     g_ptr_array_add(data, obj_data);
     g_ptr_array_add(data, work_mode);
+    g_ptr_array_add(data, signals_id);  // to temporarily disable the signals in change_work_mode
+
 
     gtk_builder_connect_signals(builder, NULL);  // auto connect some signals
+
+    GtkWindow *window = (GtkWindow *) gtk_builder_get_object(builder, "Main_window");
+    g_signal_connect(window, "delete-event", G_CALLBACK(close_app), data);
 
     GtkFileChooser *chooser = (GtkFileChooser *)gtk_builder_get_object(builder, "File_chooser_widget");
     g_signal_connect(chooser, "file_activated", G_CALLBACK(open_file), data);
@@ -24,10 +30,9 @@ static void signals_connect(GtkBuilder *builder) {
     GtkToggleButton *moving_toggle_button = (GtkToggleButton *)gtk_builder_get_object(builder, "Moving_toggle_button");
     GtkToggleButton *rotation_toggle_button = (GtkToggleButton *)gtk_builder_get_object(builder, "Rotation_toggle_button");
     GtkToggleButton *scaling_toggle_button = (GtkToggleButton *)gtk_builder_get_object(builder, "Scaling_toggle_button");
-    g_signal_connect(moving_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
-    g_signal_connect(rotation_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
-    g_signal_connect(scaling_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
-
+    signals_id[moving_signal] = g_signal_connect(moving_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
+    signals_id[rotation_signal] = g_signal_connect(rotation_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
+    signals_id[scaling_signal] = g_signal_connect(scaling_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
 
     GtkButton *up_button = (GtkButton *)gtk_builder_get_object(builder, "Up_button");
     GtkButton *down_button = (GtkButton *)gtk_builder_get_object(builder, "Down_button");
@@ -35,13 +40,20 @@ static void signals_connect(GtkBuilder *builder) {
     GtkButton *right_button = (GtkButton *)gtk_builder_get_object(builder, "Right_button");
     GtkButton *z_up_button = (GtkButton *)gtk_builder_get_object(builder, "Z_up_button");
     GtkButton *z_down_button = (GtkButton *)gtk_builder_get_object(builder, "Z_down_button");
-    g_signal_connect(up_button, "clicked", G_CALLBACK(change_display), data);
-    g_signal_connect(down_button, "clicked", G_CALLBACK(change_display), data);
-    g_signal_connect(left_button, "clicked", G_CALLBACK(change_display), data);
-    g_signal_connect(right_button, "clicked", G_CALLBACK(change_display), data);
-    g_signal_connect(z_up_button, "clicked", G_CALLBACK(change_display), data);
-    g_signal_connect(z_down_button, "clicked", G_CALLBACK(change_display), data);
+    g_signal_connect(up_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(down_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(left_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(right_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(z_up_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(z_down_button, "clicked", G_CALLBACK(buttons_change_display), data);
 
+    GtkButton *render_button = (GtkButton *) gtk_builder_get_object(builder, "Render_button");
+    g_signal_connect(render_button, "clicked", G_CALLBACK(entrys_change_display), data);
+
+    GtkToggleButton *controller_button = (GtkToggleButton *) gtk_builder_get_object(builder, "Controller_mode_button");
+    GtkToggleButton *coordinates_button = (GtkToggleButton *) gtk_builder_get_object(builder, "Coordinates_mode_button");
+    signals_id[controller_signal] = g_signal_connect(controller_button, "clicked", G_CALLBACK(change_input_mode), data);
+    signals_id[coordinates_signal] = g_signal_connect(coordinates_button, "clicked", G_CALLBACK(change_input_mode), data);
 }
 
 static GtkWidget *create_main_window() {
@@ -56,7 +68,7 @@ static GtkWidget *create_main_window() {
     }
     signals_connect(builder);
 
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "Main"));
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "Main_window"));
     if (!window) {
         g_critical("Ошибка при получении виджета окна");
     }

@@ -2,7 +2,14 @@
 
 #define RADIANS_TO_DEGREE(val) ((val) * M_PI / 180)
 
+static void apply_multiplier(coordinates_t *coord, float multiplier) {
+    coord->x = coord->x*multiplier;
+    coord->y = coord->y*multiplier;
+    coord->z = coord->z*multiplier;
+}
+
 void move(obj_data_t *data, coordinates_t coord) {
+    apply_multiplier(&coord, MOVING_MULTIPLIER);
     for (int i = 0; i < data->count_points; i++) {
         data->points[i].x += coord.x;
         data->points[i].y += coord.y;
@@ -11,42 +18,34 @@ void move(obj_data_t *data, coordinates_t coord) {
 }
 
 void scale(obj_data_t *data, coordinates_t coord) {
-    coord.x = 1 + coord.x/10;
-    coord.y = 1 + coord.y/10;
-    coord.z = 1 + coord.z/10;
-
+    apply_multiplier(&coord, SCALE_MULTIPLIER);
     for (int i = 0; i < data->count_points; i++) {
-            data->points[i].x *= coord.x;
-            data->points[i].y *= coord.y;
-            data->points[i].z *= coord.z;
+            data->points[i].x *= coord.x + 1;
+            data->points[i].y *= coord.y + 1;
+            data->points[i].z *= coord.z + 1;
         }
 }
 
 static void rotate_x(coordinates_t *coord, double angle) {
     angle = RADIANS_TO_DEGREE(angle);
-    float z = coord->z, x = coord->x;
-    coord->x = x * cos(angle) + z * sin(angle);
-    coord->z = -x * sin(angle) + z * cos(angle);
+    coord->x = (float)(coord->x * cos(angle) + coord->z * sin(angle));
+    coord->z = (float)(-coord->x * sin(angle) + coord->z * cos(angle));
 }
 
 static void rotate_y(coordinates_t *coord, double angle) {
     angle = RADIANS_TO_DEGREE(angle);
-    float z = coord->z, y = coord->y;
-    coord->y = y * cos(angle) + z * sin(angle);
-    coord->z = -y * sin(angle) + z * cos(angle);
+    coord->y = (float)(coord->y * cos(angle) + coord->z * sin(angle));
+    coord->z = (float)(-coord->y * sin(angle) + coord->z * cos(angle));
 }
 
 static void rotate_z(coordinates_t *coord, double angle) {
     angle = RADIANS_TO_DEGREE(angle);
-    float x = coord->x, y = coord->y;
-    coord->x = x * cos(angle) + y * sin(angle);
-    coord->y = -x * sin(angle) + y * cos(angle);
+    coord->x = (float)(coord->x * cos(angle) + coord->y * sin(angle));
+    coord->y = (float)(-coord->x * sin(angle) + coord->y * cos(angle));
 }
 
 status_t rotate(obj_data_t *data, coordinates_t coord) {
-    coord.x = coord.x*2;
-    coord.y = coord.y*2;
-    coord.z = coord.z*2;
+    apply_multiplier(&coord, ROTATING_MULTIPLIER);
 
     for (int i = 0; i < data->count_points; i++) {
         rotate_x(&data->points[i], coord.x);

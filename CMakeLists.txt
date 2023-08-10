@@ -6,13 +6,16 @@ set(CMAKE_C_STANDARD 11)
 SET(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -rdynamic")
 
 add_executable(3DViewer src/gui/main_window.c
-                        src/gui/change_display.c
+        src/gui/buttons_change_display.c
                         src/gui/open_file.c
+                        src/gui/change_work_mode.c
+                        src/gui/close_app.c
+                        src/gui/change_input_mode.c
 
                         src/lib/affine_transformations.c
                         src/lib/parse_file.c
                         src/lib/render.c
-        src/gui/change_work_mode.c)
+        src/gui/entrys_change_display.c)
 
 
 find_package(PkgConfig REQUIRED)

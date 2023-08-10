@@ -10,8 +10,8 @@
 #define CSS_FILE   "../src/gui/common.css"
 
 // Render
-#define RENDER_FILE "/home/ivan/School/3DViewer/src/$render_data.txt"
-#define IMAGE_FILE "/home/ivan/School/3DViewer/src/$graph.png"
+#define RENDER_FILE "/tmp/$render_data.txt"
+#define IMAGE_FILE "/tmp/$graph.png"
 #define GNUPLOT_SCRIPT "set output '%s'\n         \
   set terminal pngcairo size %d,%d\n    \
   set decimalsign locale\n              \
@@ -25,8 +25,12 @@
   set pm3d border lc \"black\" lw 1.5\n \
   splot '%s' notitle with polygons fs transparent solid 0.8 fc \"gray75\"\n"
 
-#define INITIAL_WORK_MODE moving
+// Control visibility
+#define INITIAL_WORK_MODE moving_mode
 #define OFFSET_IN_ONE_CLICK 1
+#define MOVING_MULTIPLIER 1
+#define SCALE_MULTIPLIER 0.1
+#define ROTATING_MULTIPLIER 2
 
 // MESSAGES
 #define FILE_OPENING_ERR_MSG "Не удалось открыть файл: "
@@ -44,11 +48,18 @@ typedef enum status {
 } status_t;
 
 typedef enum work_mode {
-    moving,
-    rotation,
-    scaling,
-    block
+    moving_mode,
+    rotation_mode,
+    scaling_mode
 } work_mode_t;
+
+typedef enum signals_id_indexes {
+  moving_signal,
+  rotation_signal,
+  scaling_signal,
+  controller_signal,
+      coordinates_signal
+} signals_id_indexes_t;
 
 typedef struct coordinates {
     float x;
@@ -71,7 +82,10 @@ typedef struct obj_data {
 // gui
 void open_file(GtkWidget *chooser, GPtrArray *data);
 void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
-void change_display(GtkWidget *button, GPtrArray *data);
+void buttons_change_display(GtkWidget *button, GPtrArray *data);
+void entrys_change_display(GtkWidget *button, GPtrArray *data);
+void change_input_mode(GtkWidget *toggle_button, GPtrArray *data);
+gboolean close_app(GtkWidget* window, GPtrArray *data);
 
 // lib
 status_t parse_file(gchar *filename, obj_data_t *obj_data);

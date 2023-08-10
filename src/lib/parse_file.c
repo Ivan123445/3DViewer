@@ -57,7 +57,7 @@ static void replace_symb(gchar *str, gchar replaceable, gchar replacing) {
 
 static status_t scan_point(gchar *str, coordinates_t *point) {
     status_t status = OK;
-    if (sscanf(str, "v %f %f %f", &point->x, &point->y, &point->z) != 3) {
+    if (sscanf(str, "v %f %f %f\n", &point->x, &point->y, &point->z) != 3) {
         status = FORMAT_FILE_ERR;
     }
     return status;
