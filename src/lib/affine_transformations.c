@@ -1,15 +1,8 @@
 #include "../s21_3dviewer.h"
 
-#define RADIANS_TO_DEGREE(val) ((val) * M_PI / 180)
-
-static void apply_multiplier(coordinates_t *coord, float multiplier) {
-    coord->x = coord->x*multiplier;
-    coord->y = coord->y*multiplier;
-    coord->z = coord->z*multiplier;
-}
+#define DEGREE_TO_RADIANS(val) ((val) * M_PI / 180)
 
 void move(obj_data_t *data, coordinates_t coord) {
-    apply_multiplier(&coord, MOVING_MULTIPLIER);
     for (int i = 0; i < data->count_points; i++) {
         data->points[i].x += coord.x;
         data->points[i].y += coord.y;

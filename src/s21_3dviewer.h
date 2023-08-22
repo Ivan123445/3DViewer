@@ -8,6 +8,7 @@
 // UI
 #define GLADE_FILE "../src/gui/3dviewer.glade"
 #define CSS_FILE   "../src/gui/common.css"
+#define ICON_FILE  "../misc/icon.png"
 
 // Render
 #define RENDER_FILE "/tmp/$render_data.txt"
@@ -26,15 +27,19 @@
   splot '%s' notitle with polygons fs transparent solid 0.8 fc \"gray75\"\n"
 
 // Control visibility
-#define INITIAL_WORK_MODE moving_mode
-#define OFFSET_IN_ONE_CLICK 1
-#define MOVING_MULTIPLIER 1
-#define SCALE_MULTIPLIER 0.1
-#define ROTATING_MULTIPLIER 2
+#define INITIAL_WORK_MODE   moving_mode
+#define INITIAL_SCALE       10
+#define SCALE_OFFSET        1
+#define AXIS_BUTTONS_OFFSET 1
+#define MOVING_MULTIPLIER   1
+#define SCALE_MULTIPLIER    0.1
+#define ROTATING_MULTIPLIER 4
 
-// MESSAGES
-#define FILE_OPENING_ERR_MSG "Не удалось открыть файл: "
-#define FORMAT_FILE_ERR_MSG  "Ошибка формата файла"
+// Messages
+#define OPEN_GLADE_FILE_ERR_MSG "Unable to load glade file:"
+#define OPEN_CSS_FILE_ERR_MSG   "Unable to load css file:"
+#define GETTING_WINDOW_WIDGET_ERR_MSG "Error getting the window widget"
+#define MODEL_FILE_FORMAT_ERR_MSG  "Model file format error"
 
 typedef enum status {
     OK,
@@ -47,18 +52,18 @@ typedef enum status {
     ZERO_SCALING_ERR
 } status_t;
 
-typedef enum work_mode {
+typedef enum display_change_mode {
     moving_mode,
     rotation_mode,
     scaling_mode
-} work_mode_t;
+} display_change_mode_t;
 
 typedef enum signals_id_indexes {
   moving_signal,
   rotation_signal,
   scaling_signal,
   controller_signal,
-      coordinates_signal
+  coordinates_signal
 } signals_id_indexes_t;
 
 typedef struct coordinates {
@@ -89,7 +94,7 @@ gboolean close_app(GtkWidget* window, GPtrArray *data);
 
 // lib
 status_t parse_file(gchar *filename, obj_data_t *obj_data);
-status_t render_obj(GtkImage *image, obj_data_t *obj_data);
+status_t render(GtkImage *image, obj_data_t *obj_data);
 
 void move(obj_data_t *data, coordinates_t coord);
 void scale(obj_data_t *data, coordinates_t coord);

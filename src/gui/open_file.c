@@ -22,8 +22,8 @@ void open_file(GtkWidget *chooser, GPtrArray *data) {
     if (parse_file(file_path, obj_data) == OK) {
         gtk_widget_set_sensitive(axis_buttons_grid, TRUE);
         gtk_label_set_label(file_name_label, get_filename_position(file_path));
-        render_obj(image, obj_data);
+        render(image, obj_data);
     } else {
-        g_print(FORMAT_FILE_ERR_MSG"\n");
+        g_print(MODEL_FILE_FORMAT_ERR_MSG"\n");
     }
 }

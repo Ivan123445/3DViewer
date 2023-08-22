@@ -41,7 +41,7 @@ static status_t set_image(GtkImage *image) {
     gtk_image_set_from_file(image, IMAGE_FILE);
 }
 
-status_t render_obj(GtkImage *image, obj_data_t *obj_data) {
+status_t render(GtkImage *image, obj_data_t *obj_data) {
     status_t status = write_obj_data_to_file(RENDER_FILE, obj_data);
 
     if (status == OK) {

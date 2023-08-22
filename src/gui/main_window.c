@@ -11,11 +11,11 @@ static void signals_connect(GtkBuilder *builder) {
     GPtrArray *data = g_ptr_array_new();
     obj_data_t *obj_data = calloc(1, sizeof(obj_data_t));
     gulong *signals_id = calloc(5, sizeof (gulong));
-    work_mode_t *work_mode = calloc(1, sizeof(work_mode));
-    *work_mode = INITIAL_WORK_MODE;
+    display_change_mode_t *display_change_mode = calloc(1, sizeof(display_change_mode));
+    *display_change_mode = INITIAL_WORK_MODE;
     g_ptr_array_add(data, builder);
     g_ptr_array_add(data, obj_data);
-    g_ptr_array_add(data, work_mode);
+    g_ptr_array_add(data, display_change_mode);
     g_ptr_array_add(data, signals_id);  // to temporarily disable the signals in change_work_mode
 
 
@@ -63,14 +63,14 @@ static GtkWidget *create_main_window() {
 
     builder = gtk_builder_new();
     if (!gtk_builder_add_from_file(builder, GLADE_FILE, &error)) {
-        g_critical("Не могу загрузить файл: %s", error->message);
+        g_critical(OPEN_GLADE_FILE_ERR_MSG "%s", error->message);
         g_error_free(error);
     }
     signals_connect(builder);
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "Main_window"));
     if (!window) {
-        g_critical("Ошибка при получении виджета окна");
+        g_critical(GETTING_WINDOW_WIDGET_ERR_MSG);
     }
 //    g_object_unref(builder);
 
@@ -86,7 +86,7 @@ int main (int argc, char *argv[]) {
 
     window = create_main_window();
     if (!gtk_css_provider_load_from_path(provider, CSS_FILE, &error)) {
-        g_critical("Ошибка загрузки css стилей: %s", error->message);
+        g_critical(OPEN_CSS_FILE_ERR_MSG "%s", error->message);
     } else {
         gtk_style_context_add_provider_for_screen(
                 gdk_screen_get_default(), GTK_STYLE_PROVIDER(provider),

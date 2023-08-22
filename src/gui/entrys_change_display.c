@@ -3,7 +3,7 @@
 void entrys_change_display(GtkWidget *button, GPtrArray *data) {
     GtkBuilder *builder = data->pdata[0];
     obj_data_t *obj_data = data->pdata[1];
-    work_mode_t *work_mode = data->pdata[2];
+    display_change_mode_t *work_mode = data->pdata[2];
     GtkImage *image = (GtkImage *) gtk_builder_get_object(builder, "Model_image");
 
     GtkEntry *x_offset_entry = (GtkEntry *) gtk_builder_get_object(builder, "X_offset_entry");
@@ -27,7 +27,7 @@ void entrys_change_display(GtkWidget *button, GPtrArray *data) {
             break;
     }
 
-    render_obj(image, obj_data);
+    render(image, obj_data);
 
 }
 
