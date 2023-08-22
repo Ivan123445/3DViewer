@@ -62,9 +62,9 @@ typedef enum signals_id_indexes {
 } signals_id_indexes_t;
 
 typedef struct coordinates {
-    float x;
-    float y;
-    float z;
+    double x;
+    double y;
+    double z;
 } coordinates_t;
 
 typedef struct surface {
