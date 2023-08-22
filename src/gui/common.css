@@ -1,1 +1,19 @@
-.axis_button {background: grey}
+.open_file_button {}
+.display_mode_button {}
+
+.axis_button {
+    background: #535353;
+    font-weight: bold;
+}
+
+.scale_button {
+    background: orangered;
+    font-weight: bold;
+}
+
+.render_button {
+    background: #535353;
+    font-weight: normal;
+}
+
+.input_mode_button {}

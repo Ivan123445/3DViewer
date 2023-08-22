@@ -4,19 +4,24 @@
   <requires lib="gtk+" version="3.24"/>
   <!-- interface-css-provider-path common.css -->
   <object class="GtkWindow" id="Files_window">
+    <property name="name">Files_window</property>
     <property name="can-focus">False</property>
+    <property name="window-position">center</property>
     <property name="destroy-with-parent">True</property>
+    <property name="deletable">False</property>
     <child>
       <object class="GtkFileChooserWidget" id="File_chooser_widget">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="create-folders">False</property>
+        <signal name="file-activated" handler="hide_file_window" object="Files_window" swapped="no"/>
       </object>
     </child>
   </object>
   <object class="GtkWindow" id="Main_window">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">3DViewer</property>
+    <property name="icon-name">accessories-calculator</property>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child>
       <!-- n-columns=2 n-rows=1 -->
@@ -29,6 +34,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">end</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
             <child>
               <!-- n-columns=1 n-rows=2 -->
               <object class="GtkGrid" id="File_grid">
@@ -47,11 +55,15 @@
                       <object class="GtkButton" id="File_selection_button">
                         <property name="label" translatable="yes">Open</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="can-default">True</property>
                         <property name="receives-default">True</property>
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <signal name="clicked" handler="create_open_file_window" object="Files_window" swapped="no"/>
+                        <signal name="clicked" handler="show_file_window" object="Files_window" swapped="no"/>
+                        <style>
+                          <class name="open_file_button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -65,6 +77,7 @@
                         <property name="hexpand">True</property>
                         <property name="vexpand">False</property>
                         <property name="label" translatable="yes">No file selected</property>
+                        <property name="max-width-chars">25</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -118,8 +131,13 @@
                         <property name="label" translatable="yes">Moving</property>
                         <property name="name">Moving_toggle_button</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">True</property>
+                        <property name="margin-end">1</property>
+                        <property name="active">True</property>
+                        <style>
+                          <class name="display_mode_button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -131,8 +149,12 @@
                         <property name="label" translatable="yes">Rotation</property>
                         <property name="name">Rotation_toggle_button</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">True</property>
+                        <property name="margin-end">1</property>
+                        <style>
+                          <class name="display_mode_button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -144,8 +166,11 @@
                         <property name="label" translatable="yes">Scaling</property>
                         <property name="name">Scaling_toggle_button</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">True</property>
+                        <style>
+                          <class name="display_mode_button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
@@ -159,12 +184,12 @@
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
+                  <!-- n-columns=3 n-rows=1 -->
                   <object class="GtkGrid" id="Buttons_input_grid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-top">5</property>
-                    <property name="margin-bottom">5</property>
+                    <property name="margin-top">22</property>
+                    <property name="margin-bottom">22</property>
                     <child>
                       <!-- n-columns=3 n-rows=3 -->
                       <object class="GtkGrid" id="X_y_buttons_grid">
@@ -313,6 +338,57 @@
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
+                    <child>
+                      <!-- n-columns=1 n-rows=2 -->
+                      <object class="GtkGrid" id="Scale_grid">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <object class="GtkButton" id="Plus_scale_button">
+                            <property name="label" translatable="yes">+</property>
+                            <property name="name">Plus_scale_button</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <style>
+                              <class name="scale_button"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="Minus_scale_button">
+                            <property name="label" translatable="yes">-</property>
+                            <property name="name">Minus_scale_button</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="margin-bottom">5</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <style>
+                              <class name="scale_button"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -332,8 +408,12 @@
                         <property name="label" translatable="yes">Controller</property>
                         <property name="name">Controller_mode_button</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">True</property>
+                        <property name="active">True</property>
+                        <style>
+                          <class name="input_mode_button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -345,8 +425,11 @@
                         <property name="label" translatable="yes">Coordinates</property>
                         <property name="name">Coordinates_mode_button</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <property name="receives-default">True</property>
+                        <style>
+                          <class name="input_mode_button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -440,6 +523,9 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
+                        <style>
+                          <class name="render_button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>

@@ -1,10 +1,17 @@
 #include "../s21_3dviewer.h"
 
-G_MODULE_EXPORT GtkWidget *create_open_file_window(
-        GtkButton *button, GtkWidget *open_file_window) {
-    gtk_widget_show(open_file_window);
+G_MODULE_EXPORT GtkWidget *show_file_window(
+        GtkButton *button, GtkWidget *file_window) {
+    gtk_widget_show(file_window);
 
-    return open_file_window;
+    return file_window;
+}
+
+G_MODULE_EXPORT GtkWidget *hide_file_window(
+        GtkWidget *button, GtkWidget *file_window) {
+    gtk_widget_hide(file_window);  // TODO throws an warning
+
+    return file_window;
 }
 
 static void signals_connect(GtkBuilder *builder) {
@@ -26,6 +33,8 @@ static void signals_connect(GtkBuilder *builder) {
 
     GtkFileChooser *chooser = (GtkFileChooser *)gtk_builder_get_object(builder, "File_chooser_widget");
     g_signal_connect(chooser, "file_activated", G_CALLBACK(open_file), data);
+    g_signal_connect(chooser, "file_activated", G_CALLBACK(hide_file_window), data);
+
 
     GtkToggleButton *moving_toggle_button = (GtkToggleButton *)gtk_builder_get_object(builder, "Moving_toggle_button");
     GtkToggleButton *rotation_toggle_button = (GtkToggleButton *)gtk_builder_get_object(builder, "Rotation_toggle_button");
@@ -46,6 +55,12 @@ static void signals_connect(GtkBuilder *builder) {
     g_signal_connect(right_button, "clicked", G_CALLBACK(buttons_change_display), data);
     g_signal_connect(z_up_button, "clicked", G_CALLBACK(buttons_change_display), data);
     g_signal_connect(z_down_button, "clicked", G_CALLBACK(buttons_change_display), data);
+
+    GtkButton *plus_scale_button = (GtkButton *)gtk_builder_get_object(builder, "Plus_scale_button");
+    GtkButton *minus_scale_button = (GtkButton *)gtk_builder_get_object(builder, "Minus_scale_button");
+    g_signal_connect(plus_scale_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(minus_scale_button, "clicked", G_CALLBACK(buttons_change_display), data);
+
 
     GtkButton *render_button = (GtkButton *) gtk_builder_get_object(builder, "Render_button");
     g_signal_connect(render_button, "clicked", G_CALLBACK(entrys_change_display), data);

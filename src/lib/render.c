@@ -24,14 +24,16 @@ static status_t write_obj_data_to_file(gchar *filename, obj_data_t *obj_data) {
     return status;
 }
 
-static status_t call_gnuplot(unsigned short width, unsigned short height) {
+static status_t call_gnuplot(unsigned short width, unsigned short height, unsigned short scale) {
     status_t status = OK;
     FILE *pipe_gnuplot = popen("/usr/bin/gnuplot", "w");
     if (!pipe_gnuplot) {
         status = PIPE_OPEN_ERR;
     }
 
-    fprintf(pipe_gnuplot, GNUPLOT_SCRIPT, IMAGE_FILE, width, height, RENDER_FILE);
+    fprintf(pipe_gnuplot, GNUPLOT_SCRIPT, IMAGE_FILE, width, height,
+            scale, scale, scale, scale, scale, scale,  // set scale for each axis
+            RENDER_FILE);
 
     pclose(pipe_gnuplot);
     return status;
@@ -46,7 +48,8 @@ status_t render(GtkImage *image, obj_data_t *obj_data) {
 
     if (status == OK) {
         GtkWidget *image_widget = (GtkWidget *)image;
-        status = call_gnuplot(gtk_widget_get_allocated_width(image_widget), gtk_widget_get_allocated_height(image_widget));
+        status = call_gnuplot(gtk_widget_get_allocated_width(image_widget), gtk_widget_get_allocated_height(image_widget),
+                                obj_data->scale);
     }
 
     if (status == OK) {

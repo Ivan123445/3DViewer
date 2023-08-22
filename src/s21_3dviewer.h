@@ -16,15 +16,11 @@
 #define GNUPLOT_SCRIPT "set output '%s'\n         \
   set terminal pngcairo size %d,%d\n    \
   set decimalsign locale\n              \
-  set xyplane at 0\n                    \
-  set view equal xyz\n                  \
-  unset border\n                        \
   set xlabel \"X\"\n                    \
   set ylabel \"Y\"\n                    \
   set zlabel \"Z\"\n                    \
-  set pm3d depth\n                      \
-  set pm3d border lc \"black\" lw 1.5\n \
-  splot '%s' notitle with polygons fs transparent solid 0.8 fc \"gray75\"\n"
+  set pm3d border lc \"black\" lw 0.3\n \
+  splot [-%d:%d][-%d:%d][-%d:%d] '%s' notitle with polygons fs transparent solid 0.8 fc \"gray\"\n"
 
 // Control visibility
 #define INITIAL_WORK_MODE   moving_mode
@@ -78,6 +74,7 @@ typedef struct surface {
 } surface_t;
 
 typedef struct obj_data {
+    unsigned short scale;
     unsigned int count_points;
     coordinates_t *points;
     unsigned int count_surfaces;
