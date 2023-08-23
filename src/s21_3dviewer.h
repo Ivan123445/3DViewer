@@ -24,18 +24,18 @@
 
 // Control visibility
 #define INITIAL_WORK_MODE   moving_mode
-#define INITIAL_SCALE       10
-#define SCALE_OFFSET        1
-#define AXIS_BUTTONS_OFFSET 1
-#define MOVING_MULTIPLIER   1
+#define INITIAL_GRAPH_SCALE 10
+#define GRAPH_SCALE_STEP    1
+#define AXIS_BUTTONS_STEP   1
+#define MOVE_MULTIPLIER     1
 #define SCALE_MULTIPLIER    0.1
-#define ROTATING_MULTIPLIER 4
+#define ROTATE_MULTIPLIER   4
 
 // Messages
-#define OPEN_GLADE_FILE_ERR_MSG "Unable to load glade file:"
-#define OPEN_CSS_FILE_ERR_MSG   "Unable to load css file:"
+#define OPEN_GLADE_FILE_ERR_MSG       "Unable to load glade file:"
+#define OPEN_CSS_FILE_ERR_MSG         "Unable to load css file:"
 #define GETTING_WINDOW_WIDGET_ERR_MSG "Error getting the window widget"
-#define MODEL_FILE_FORMAT_ERR_MSG  "Model file format error"
+#define MODEL_FILE_FORMAT_ERR_MSG     "Model file format error"
 
 typedef enum status {
     OK,
@@ -44,8 +44,7 @@ typedef enum status {
     ALLOC_ERR,
     OPEN_RENDER_FILE_ERR,
     PIPE_OPEN_ERR,
-    WRONG_BUTTON_ERR,
-    ZERO_SCALING_ERR
+    WRONG_BUTTON_ERR
 } status_t;
 
 typedef enum display_change_mode {
@@ -74,14 +73,14 @@ typedef struct surface {
 } surface_t;
 
 typedef struct obj_data {
-    unsigned short scale;
+    unsigned short graph_scale;
     unsigned int count_points;
     coordinates_t *points;
     unsigned int count_surfaces;
     surface_t *surfaces;
 } obj_data_t;
 
-// gui
+// gui/slots
 void open_file(GtkWidget *chooser, GPtrArray *data);
 void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
 void buttons_change_display(GtkWidget *button, GPtrArray *data);

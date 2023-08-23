@@ -43,22 +43,22 @@ static void signals_connect(GtkBuilder *builder) {
     signals_id[rotation_signal] = g_signal_connect(rotation_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
     signals_id[scaling_signal] = g_signal_connect(scaling_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
 
-    GtkButton *up_button = (GtkButton *)gtk_builder_get_object(builder, "Up_button");
-    GtkButton *down_button = (GtkButton *)gtk_builder_get_object(builder, "Down_button");
-    GtkButton *left_button = (GtkButton *)gtk_builder_get_object(builder, "Left_button");
-    GtkButton *right_button = (GtkButton *)gtk_builder_get_object(builder, "Right_button");
-    GtkButton *z_up_button = (GtkButton *)gtk_builder_get_object(builder, "Z_up_button");
+    GtkButton *up_button     = (GtkButton *)gtk_builder_get_object(builder, "Up_button");
+    GtkButton *down_button   = (GtkButton *)gtk_builder_get_object(builder, "Down_button");
+    GtkButton *left_button   = (GtkButton *)gtk_builder_get_object(builder, "Left_button");
+    GtkButton *right_button  = (GtkButton *)gtk_builder_get_object(builder, "Right_button");
+    GtkButton *z_up_button   = (GtkButton *)gtk_builder_get_object(builder, "Z_up_button");
     GtkButton *z_down_button = (GtkButton *)gtk_builder_get_object(builder, "Z_down_button");
-    g_signal_connect(up_button, "clicked", G_CALLBACK(buttons_change_display), data);
-    g_signal_connect(down_button, "clicked", G_CALLBACK(buttons_change_display), data);
-    g_signal_connect(left_button, "clicked", G_CALLBACK(buttons_change_display), data);
-    g_signal_connect(right_button, "clicked", G_CALLBACK(buttons_change_display), data);
-    g_signal_connect(z_up_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(up_button,     "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(down_button,   "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(left_button,   "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(right_button,  "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(z_up_button,   "clicked", G_CALLBACK(buttons_change_display), data);
     g_signal_connect(z_down_button, "clicked", G_CALLBACK(buttons_change_display), data);
 
     GtkButton *plus_scale_button = (GtkButton *)gtk_builder_get_object(builder, "Plus_scale_button");
     GtkButton *minus_scale_button = (GtkButton *)gtk_builder_get_object(builder, "Minus_scale_button");
-    g_signal_connect(plus_scale_button, "clicked", G_CALLBACK(buttons_change_display), data);
+    g_signal_connect(plus_scale_button,  "clicked", G_CALLBACK(buttons_change_display), data);
     g_signal_connect(minus_scale_button, "clicked", G_CALLBACK(buttons_change_display), data);
 
 
@@ -67,7 +67,7 @@ static void signals_connect(GtkBuilder *builder) {
 
     GtkToggleButton *controller_button = (GtkToggleButton *) gtk_builder_get_object(builder, "Controller_mode_button");
     GtkToggleButton *coordinates_button = (GtkToggleButton *) gtk_builder_get_object(builder, "Coordinates_mode_button");
-    signals_id[controller_signal] = g_signal_connect(controller_button, "clicked", G_CALLBACK(change_input_mode), data);
+    signals_id[controller_signal]  = g_signal_connect(controller_button, "clicked", G_CALLBACK(change_input_mode), data);
     signals_id[coordinates_signal] = g_signal_connect(coordinates_button, "clicked", G_CALLBACK(change_input_mode), data);
 }
 

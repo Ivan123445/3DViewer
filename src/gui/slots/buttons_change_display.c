@@ -1,4 +1,4 @@
-#include "../s21_3dviewer.h"
+#include "../../s21_3dviewer.h"
 
 static void apply_multiplier(coordinates_t *coord, double multiplier) {
     coord->x = coord->x*multiplier;
@@ -17,21 +17,21 @@ void buttons_change_display(GtkWidget *button, GPtrArray *data) {
 
     const gchar *button_name = gtk_widget_get_name(button);
     if (!strcmp(button_name, "Up_button")) {
-        offset.y += AXIS_BUTTONS_OFFSET;
+        offset.y += AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Down_button")) {
-        offset.y -= AXIS_BUTTONS_OFFSET;
+        offset.y -= AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Right_button")) {
-        offset.x += AXIS_BUTTONS_OFFSET;
+        offset.x += AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Left_button")) {
-        offset.x -= AXIS_BUTTONS_OFFSET;
+        offset.x -= AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Z_up_button")) {
-        offset.z += AXIS_BUTTONS_OFFSET;
+        offset.z += AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Z_down_button")) {
-        offset.z -= AXIS_BUTTONS_OFFSET;
+        offset.z -= AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Plus_scale_button")) {
-        obj_data->scale -= obj_data->scale > 1 ? SCALE_OFFSET : 0;
+        obj_data->graph_scale -= obj_data->graph_scale > 1 ? GRAPH_SCALE_STEP : 0;
     } else if (!strcmp(button_name, "Minus_scale_button")) {
-        obj_data->scale += SCALE_OFFSET;
+        obj_data->graph_scale += GRAPH_SCALE_STEP;
     } else {
         status = WRONG_BUTTON_ERR;
     }
@@ -39,15 +39,18 @@ void buttons_change_display(GtkWidget *button, GPtrArray *data) {
     if (status == OK) {
         switch (*work_mode) {
             case moving_mode:
-                apply_multiplier(&offset, MOVING_MULTIPLIER);
+                apply_multiplier(&offset, MOVE_MULTIPLIER);
                 move(obj_data, offset);
                 break;
             case rotation_mode:
-                apply_multiplier(&offset, ROTATING_MULTIPLIER);
+                apply_multiplier(&offset, ROTATE_MULTIPLIER);
                 rotate(obj_data, offset);
                 break;
             case scaling_mode:
                 apply_multiplier(&offset, SCALE_MULTIPLIER);
+                offset.x++;
+                offset.y++;
+                offset.z++;
                 scale(obj_data, offset);
         }
     }
@@ -55,6 +58,5 @@ void buttons_change_display(GtkWidget *button, GPtrArray *data) {
     if (status == OK) {
         render(image, obj_data);
     }
-
 }
 

@@ -1,4 +1,4 @@
-#include "../s21_3dviewer.h"
+#include "../../s21_3dviewer.h"
 
 void entrys_change_display(GtkWidget *button, GPtrArray *data) {
     GtkBuilder *builder = data->pdata[0];

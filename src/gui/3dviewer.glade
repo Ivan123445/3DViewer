@@ -8,13 +8,12 @@
     <property name="can-focus">False</property>
     <property name="window-position">center</property>
     <property name="destroy-with-parent">True</property>
-    <property name="deletable">False</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
     <child>
       <object class="GtkFileChooserWidget" id="File_chooser_widget">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="create-folders">False</property>
-        <signal name="file-activated" handler="hide_file_window" object="Files_window" swapped="no"/>
       </object>
     </child>
   </object>
@@ -560,7 +559,7 @@
             <property name="valign">baseline</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="pixbuf">../../misc/img.png</property>
+            <property name="pixbuf">../../misc/initial_image.png</property>
           </object>
           <packing>
             <property name="left-attach">0</property>

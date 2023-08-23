@@ -114,7 +114,7 @@ status_t parse_file(gchar *filename,  obj_data_t *obj_data) {
         status = alloc_data(obj_data);
     }
     if (status == OK) {
-        obj_data->scale = INITIAL_SCALE;
+        obj_data->graph_scale = INITIAL_GRAPH_SCALE;
         status = get_obj_data(filename, obj_data);
     }
 

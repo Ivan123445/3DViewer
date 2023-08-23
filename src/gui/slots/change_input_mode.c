@@ -1,4 +1,4 @@
-#include "../s21_3dviewer.h"
+#include "../../s21_3dviewer.h"
 
 void change_input_mode(GtkWidget *toggle_button, GPtrArray *data) {
     GtkBuilder *builder = data->pdata[0];

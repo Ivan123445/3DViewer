@@ -32,7 +32,7 @@ static status_t call_gnuplot(unsigned short width, unsigned short height, unsign
     }
 
     fprintf(pipe_gnuplot, GNUPLOT_SCRIPT, IMAGE_FILE, width, height,
-            scale, scale, scale, scale, scale, scale,  // set scale for each axis
+            scale, scale, scale, scale, scale, scale,  // set graph_scale for each axis
             RENDER_FILE);
 
     pclose(pipe_gnuplot);
@@ -49,7 +49,7 @@ status_t render(GtkImage *image, obj_data_t *obj_data) {
     if (status == OK) {
         GtkWidget *image_widget = (GtkWidget *)image;
         status = call_gnuplot(gtk_widget_get_allocated_width(image_widget), gtk_widget_get_allocated_height(image_widget),
-                                obj_data->scale);
+                                obj_data->graph_scale);
     }
 
     if (status == OK) {
