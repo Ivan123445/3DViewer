@@ -11,8 +11,9 @@
 #define ICON_FILE  "../misc/icon.png"
 
 // Render
-#define RENDER_FILE "/tmp/$render_data.txt"
-#define IMAGE_FILE "/tmp/$graph.png"
+#define RENDER_FILE    "/tmp/$render_data.txt"
+#define IMAGE_FILE     "/tmp/$graph.png"
+#define ERROR_IMAGE    "../misc/error_image.png"
 #define GNUPLOT_SCRIPT "set output '%s'\n         \
   set terminal pngcairo size %d,%d\n    \
   set decimalsign locale\n              \
@@ -89,6 +90,7 @@ void change_input_mode(GtkWidget *toggle_button, GPtrArray *data);
 gboolean close_app(GtkWidget* window, GPtrArray *data);
 
 // lib
+void free_obj_data(obj_data_t *obj_data);
 status_t parse_file(gchar *filename, obj_data_t *obj_data);
 status_t render(GtkImage *image, obj_data_t *obj_data);
 

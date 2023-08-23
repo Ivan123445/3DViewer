@@ -9,7 +9,7 @@ G_MODULE_EXPORT GtkWidget *show_file_window(
 
 G_MODULE_EXPORT GtkWidget *hide_file_window(
         GtkWidget *button, GtkWidget *file_window) {
-    gtk_widget_hide(file_window);  // TODO throws an warning
+    gtk_widget_hide_on_delete(file_window);
 
     return file_window;
 }
@@ -29,11 +29,12 @@ static void signals_connect(GtkBuilder *builder) {
     gtk_builder_connect_signals(builder, NULL);  // auto connect some signals
 
     GtkWindow *window = (GtkWindow *) gtk_builder_get_object(builder, "Main_window");
-    g_signal_connect(window, "delete-event", G_CALLBACK(close_app), data);
+    g_signal_connect(window, "destroy", G_CALLBACK(close_app), data);
 
+    GtkWidget *file_window  = (GtkWidget *)gtk_builder_get_object(builder, "Files_window");
     GtkFileChooser *chooser = (GtkFileChooser *)gtk_builder_get_object(builder, "File_chooser_widget");
+    g_signal_connect(chooser, "file_activated", G_CALLBACK(hide_file_window), file_window);
     g_signal_connect(chooser, "file_activated", G_CALLBACK(open_file), data);
-    g_signal_connect(chooser, "file_activated", G_CALLBACK(hide_file_window), data);
 
 
     GtkToggleButton *moving_toggle_button = (GtkToggleButton *)gtk_builder_get_object(builder, "Moving_toggle_button");
