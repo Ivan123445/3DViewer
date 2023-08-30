@@ -16,14 +16,14 @@ void buttons_change_display(GtkWidget *button, GPtrArray *data) {
     coordinates_t offset = {0, 0, 0};
 
     const gchar *button_name = gtk_widget_get_name(button);
-    if (!strcmp(button_name, "Up_button")) {
-        offset.y += AXIS_BUTTONS_STEP;
-    } else if (!strcmp(button_name, "Down_button")) {
-        offset.y -= AXIS_BUTTONS_STEP;
-    } else if (!strcmp(button_name, "Right_button")) {
+    if (!strcmp(button_name, "X_up_button")) {
         offset.x += AXIS_BUTTONS_STEP;
-    } else if (!strcmp(button_name, "Left_button")) {
+    } else if (!strcmp(button_name, "X_down_button")) {
         offset.x -= AXIS_BUTTONS_STEP;
+    } else if (!strcmp(button_name, "Y_up_button")) {
+        offset.y += AXIS_BUTTONS_STEP;
+    } else if (!strcmp(button_name, "Y_down_button")) {
+        offset.y -= AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Z_up_button")) {
         offset.z += AXIS_BUTTONS_STEP;
     } else if (!strcmp(button_name, "Z_down_button")) {

@@ -44,10 +44,10 @@ static void signals_connect(GtkBuilder *builder) {
     signals_id[rotation_signal] = g_signal_connect(rotation_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
     signals_id[scaling_signal] = g_signal_connect(scaling_toggle_button, "clicked", G_CALLBACK(change_work_mode), data);
 
-    GtkButton *up_button     = (GtkButton *)gtk_builder_get_object(builder, "Up_button");
-    GtkButton *down_button   = (GtkButton *)gtk_builder_get_object(builder, "Down_button");
-    GtkButton *left_button   = (GtkButton *)gtk_builder_get_object(builder, "Left_button");
-    GtkButton *right_button  = (GtkButton *)gtk_builder_get_object(builder, "Right_button");
+    GtkButton *up_button     = (GtkButton *)gtk_builder_get_object(builder, "X_up_button");
+    GtkButton *down_button   = (GtkButton *)gtk_builder_get_object(builder, "X_down_button");
+    GtkButton *left_button   = (GtkButton *)gtk_builder_get_object(builder, "Y_up_button");
+    GtkButton *right_button  = (GtkButton *)gtk_builder_get_object(builder, "Y_down_button");
     GtkButton *z_up_button   = (GtkButton *)gtk_builder_get_object(builder, "Z_up_button");
     GtkButton *z_down_button = (GtkButton *)gtk_builder_get_object(builder, "Z_down_button");
     g_signal_connect(up_button,     "clicked", G_CALLBACK(buttons_change_display), data);
@@ -70,6 +70,11 @@ static void signals_connect(GtkBuilder *builder) {
     GtkToggleButton *coordinates_button = (GtkToggleButton *) gtk_builder_get_object(builder, "Coordinates_mode_button");
     signals_id[controller_signal]  = g_signal_connect(controller_button, "clicked", G_CALLBACK(change_input_mode), data);
     signals_id[coordinates_signal] = g_signal_connect(coordinates_button, "clicked", G_CALLBACK(change_input_mode), data);
+
+    GtkButton *save_image_button = (GtkButton *) gtk_builder_get_object(builder, "Save_image_button");
+    GtkButton *save_gtk_button   = (GtkButton *) gtk_builder_get_object(builder, "Save_gif_button");
+    g_signal_connect(save_image_button, "cliked", G_CALLBACK(save_image), data);
+//    g_signal_connect(save_gtk_button, "cliked", G_CALLBACK(), data);
 }
 
 static GtkWidget *create_main_window() {
@@ -88,6 +93,10 @@ static GtkWidget *create_main_window() {
     if (!window) {
         g_critical(GETTING_WINDOW_WIDGET_ERR_MSG);
     }
+//    gtk_window_set_default_icon(gdk_pixbuf_new_from_file(ICON_FILE, &error));
+//    if (error) {
+//        g_critical("Haha, clown:" "%s", error->message);
+//    }
 //    g_object_unref(builder);
 
     return window;
@@ -108,7 +117,7 @@ int main (int argc, char *argv[]) {
                 gdk_screen_get_default(), GTK_STYLE_PROVIDER(provider),
                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-
+    gtk_window_set_icon_from_file (GTK_WINDOW(window), ICON_FILE, NULL);
     gtk_widget_show(window);
 
     gtk_main();

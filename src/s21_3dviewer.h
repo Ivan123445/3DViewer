@@ -82,12 +82,13 @@ typedef struct obj_data {
 } obj_data_t;
 
 // gui/slots
-void open_file(GtkWidget *chooser, GPtrArray *data);
-void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
 void buttons_change_display(GtkWidget *button, GPtrArray *data);
-void entrys_change_display(GtkWidget *button, GPtrArray *data);
 void change_input_mode(GtkWidget *toggle_button, GPtrArray *data);
+void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
 gboolean close_app(GtkWidget* window, GPtrArray *data);
+void entrys_change_display(GtkWidget *button, GPtrArray *data);
+void open_file(GtkWidget *chooser, GPtrArray *data);
+void save_image(GtkWidget *button, GPtrArray *data);
 
 // lib
 void free_obj_data(obj_data_t *obj_data);
