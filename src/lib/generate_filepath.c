@@ -1,16 +1,22 @@
 #include "../s21_3dviewer.h"
 
-char *generate_filepath(gchar *recording_folder, char *filename) {
-    size_t recording_file_len;
+char *generate_filepath(gchar *recording_folder, char *filename, gboolean is_gif) {
+    char str_date[9];
     time_t now;
-    struct tm *local;
     time(&now);
-    local = localtime(&now);
+    struct tm *local = localtime(&now);
 
-    recording_file_len = strlen(recording_folder) + strlen(SAVE_IMAGE_NAME) + 10;  // 8 for date
+    sprintf(str_date, "_%d%d%d", local->tm_hour, local->tm_min, local->tm_sec);
 
+    size_t recording_file_len = strlen(recording_folder) + strlen(filename) + strlen(str_date);
     char *recording_file = calloc(recording_file_len + 1, sizeof(char));
 
-    sprintf(recording_file, "%s/%s%d_%d_%d.gif", recording_folder, filename, local->tm_hour, local->tm_min, local->tm_sec);
+    sprintf(recording_file, "%s/%s%s", recording_folder, filename, str_date);
+
+    if (is_gif) {
+        strcat(recording_file, ".gif");
+    } else {
+        strcat(recording_file, ".png");
+    }
     return recording_file;
 }

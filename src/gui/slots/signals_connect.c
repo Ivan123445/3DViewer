@@ -59,7 +59,7 @@ GPtrArray *signals_connect(GtkBuilder *builder) {
     GtkButton *save_image_button = (GtkButton *) gtk_builder_get_object(builder, "Save_image_button");
     GtkButton *save_gif_button   = (GtkButton *) gtk_builder_get_object(builder, "Save_gif_button");
     g_signal_connect(save_image_button, "clicked", G_CALLBACK(save_image), image_gif_folder_chooser);
-    g_signal_connect(save_gif_button, "clicked", G_CALLBACK(create_gif), image_gif_folder_chooser);
+    g_signal_connect(save_gif_button, "clicked", G_CALLBACK(save_gif), image_gif_folder_chooser);
 
     return data;
 }
