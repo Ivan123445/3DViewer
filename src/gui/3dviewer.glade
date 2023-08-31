@@ -898,7 +898,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="Save_gif_button">
                         <property name="label" translatable="yes">Save gif</property>
                         <property name="name">Save_gif_button</property>
                         <property name="visible">True</property>

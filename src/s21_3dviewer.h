@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <unistd.h>
+#include <pthread.h>
 #include <fcntl.h>
+#include <wand/MagickWand.h>
 
 // UI
 #define GLADE_FILE "../src/gui/3dviewer.glade"
@@ -38,7 +41,10 @@
 
 // Additional settings
 #define INITIAL_FOLDER_TO_SAVE "../misc/"
-#define SAVE_IMAGE_NAME "3DV_image_"  // a date is added to the end
+#define SAVE_IMAGE_NAME        "3DV_image_"  // a date is added to the end
+#define SAVE_GIF_NAME          "3DV_gif_"   // a date is added to the end
+
+#define SECONDS_IN_GIF         3
 
 // Messages
 #define OPEN_GLADE_FILE_ERR_MSG       "Unable to load glade file:"
@@ -94,6 +100,7 @@ void buttons_change_display(GtkWidget *button, GPtrArray *data);
 void change_input_mode(GtkWidget *toggle_button, GPtrArray *data);
 void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
 gboolean close_app(GtkWidget* window, GPtrArray *data);
+void create_gif(GtkWidget *button, GtkWidget *folder_chooser);
 void entrys_change_display(GtkWidget *button, GPtrArray *data);
 status_t apply_initial_settings(GPtrArray *data);
 void open_file(GtkWidget *chooser, GPtrArray *data);
@@ -102,6 +109,7 @@ GPtrArray *signals_connect(GtkBuilder *builder);
 
 // lib
 void free_obj_data(obj_data_t *obj_data);
+char *generate_filepath(gchar *folder, char *filename);
 status_t parse_file(gchar *filename, obj_data_t *obj_data);
 status_t render(GtkImage *image, obj_data_t *obj_data);
 
