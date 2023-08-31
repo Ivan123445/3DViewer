@@ -71,10 +71,11 @@ static void signals_connect(GtkBuilder *builder) {
     signals_id[controller_signal]  = g_signal_connect(controller_button, "clicked", G_CALLBACK(change_input_mode), data);
     signals_id[coordinates_signal] = g_signal_connect(coordinates_button, "clicked", G_CALLBACK(change_input_mode), data);
 
+    GtkFileChooserButton  *image_gif_folder_chooser = (GtkFileChooserButton *) gtk_builder_get_object(builder, "Save_image_folder_chooser_button");
     GtkButton *save_image_button = (GtkButton *) gtk_builder_get_object(builder, "Save_image_button");
-    GtkButton *save_gtk_button   = (GtkButton *) gtk_builder_get_object(builder, "Save_gif_button");
-    g_signal_connect(save_image_button, "cliked", G_CALLBACK(save_image), data);
-//    g_signal_connect(save_gtk_button, "cliked", G_CALLBACK(), data);
+    GtkButton *save_gif_button   = (GtkButton *) gtk_builder_get_object(builder, "Save_gif_button");
+    g_signal_connect(save_image_button, "clicked", G_CALLBACK(save_image), image_gif_folder_chooser);
+//    g_signal_connect(save_gif_button, "clicked", G_CALLBACK(), data);
 }
 
 static GtkWidget *create_main_window() {

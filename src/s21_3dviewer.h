@@ -4,6 +4,8 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+#include <fcntl.h>
 
 // UI
 #define GLADE_FILE "../src/gui/3dviewer.glade"
@@ -11,10 +13,11 @@
 #define ICON_FILE  "../misc/icon.png"
 
 // Render
-#define RENDER_FILE    "/tmp/$render_data.txt"
-#define IMAGE_FILE     "/tmp/$graph.png"
-#define ERROR_IMAGE    "../misc/error_image.png"
-#define GNUPLOT_SCRIPT "set output '%s'\n         \
+#define DATA_FOR_RENDER_FILE    "/tmp/$render_data.txt"
+#define RENDERED_IMAGE_FILE     "/tmp/$graph.png"
+#define ERROR_IMAGE             "../misc/error_image.png"
+#define GNUPLOT_SCRIPT \
+  "set output '%s'\n                   \
   set terminal pngcairo size %d,%d\n    \
   set decimalsign locale\n              \
   set xlabel \"X\"\n                    \
@@ -31,6 +34,10 @@
 #define MOVE_MULTIPLIER     1
 #define SCALE_MULTIPLIER    0.1
 #define ROTATE_MULTIPLIER   4
+
+// Additional settings
+#define INITIAL_FOLDER_TO_SAVE "../misc/"
+#define SAVE_IMAGE_NAME "3DV_image_"  // a date is added to the end
 
 // Messages
 #define OPEN_GLADE_FILE_ERR_MSG       "Unable to load glade file:"
@@ -88,7 +95,7 @@ void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
 gboolean close_app(GtkWidget* window, GPtrArray *data);
 void entrys_change_display(GtkWidget *button, GPtrArray *data);
 void open_file(GtkWidget *chooser, GPtrArray *data);
-void save_image(GtkWidget *button, GPtrArray *data);
+void save_image(GtkWidget *button, GtkWidget *folder_chooser);
 
 // lib
 void free_obj_data(obj_data_t *obj_data);

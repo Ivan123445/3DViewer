@@ -31,20 +31,20 @@ static status_t call_gnuplot(unsigned short width, unsigned short height, unsign
         status = PIPE_OPEN_ERR;
     }
 
-    fprintf(pipe_gnuplot, GNUPLOT_SCRIPT, IMAGE_FILE, width, height,
+    fprintf(pipe_gnuplot, GNUPLOT_SCRIPT, RENDERED_IMAGE_FILE, width, height,
             scale, scale, scale, scale, scale, scale,  // set graph_scale for each axis
-            RENDER_FILE);
+            DATA_FOR_RENDER_FILE);
 
     pclose(pipe_gnuplot);
     return status;
 }
 
 static status_t set_image(GtkImage *image) {
-    gtk_image_set_from_file(image, IMAGE_FILE);
+    gtk_image_set_from_file(image, RENDERED_IMAGE_FILE);
 }
 
 status_t render(GtkImage *image, obj_data_t *obj_data) {
-    status_t status = write_obj_data_to_file(RENDER_FILE, obj_data);
+    status_t status = write_obj_data_to_file(DATA_FOR_RENDER_FILE, obj_data);
 
     if (status == OK) {
         GtkWidget *image_widget = (GtkWidget *)image;
