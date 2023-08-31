@@ -2,7 +2,7 @@
 
 void change_work_mode(GtkWidget *toggle_button, GPtrArray *data) {
     GtkBuilder *builder = data->pdata[0];
-    display_change_mode_t *work_mode = data->pdata[2];
+    work_mode_t *work_mode = data->pdata[2];
     gulong *signals_id_work_mode_button = data->pdata[3];
 
     GtkToggleButton *moving_toggle_button = (GtkToggleButton *)gtk_builder_get_object(builder, "Moving_toggle_button");

@@ -222,6 +222,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="create-folders">False</property>
+        <signal name="file-activated" handler="hide_file_window" object="Files_window" swapped="no"/>
       </object>
     </child>
   </object>

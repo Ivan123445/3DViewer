@@ -28,6 +28,7 @@
 
 // Control visibility
 #define INITIAL_WORK_MODE   moving_mode
+#define INITIAL_INPUT_MODE  1  // 1 - controller, 2 - coordinates
 #define INITIAL_GRAPH_SCALE 10
 #define GRAPH_SCALE_STEP    1
 #define AXIS_BUTTONS_STEP   1
@@ -55,11 +56,11 @@ typedef enum status {
     WRONG_BUTTON_ERR
 } status_t;
 
-typedef enum display_change_mode {
+typedef enum work_mode {
     moving_mode,
     rotation_mode,
     scaling_mode
-} display_change_mode_t;
+} work_mode_t;
 
 typedef enum signals_id_indexes {
   moving_signal,
@@ -94,8 +95,10 @@ void change_input_mode(GtkWidget *toggle_button, GPtrArray *data);
 void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
 gboolean close_app(GtkWidget* window, GPtrArray *data);
 void entrys_change_display(GtkWidget *button, GPtrArray *data);
+status_t apply_initial_settings(GPtrArray *data);
 void open_file(GtkWidget *chooser, GPtrArray *data);
 void save_image(GtkWidget *button, GtkWidget *folder_chooser);
+GPtrArray *signals_connect(GtkBuilder *builder);
 
 // lib
 void free_obj_data(obj_data_t *obj_data);

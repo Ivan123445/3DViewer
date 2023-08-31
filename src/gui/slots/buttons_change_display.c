@@ -10,7 +10,7 @@ void buttons_change_display(GtkWidget *button, GPtrArray *data) {
     status_t status = OK;
     GtkBuilder *builder = data->pdata[0];
     obj_data_t *obj_data = data->pdata[1];
-    display_change_mode_t *work_mode = data->pdata[2];
+    work_mode_t *work_mode = data->pdata[2];
     GtkImage *image = (GtkImage *) gtk_builder_get_object(builder, "Model_image");
 
     coordinates_t offset = {0, 0, 0};
