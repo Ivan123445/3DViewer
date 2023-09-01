@@ -9,8 +9,8 @@ static status_t write_obj_data_to_file(gchar *filename, obj_data_t *obj_data) {
 
     if (status == OK) {
         for (int surface_num = 0; surface_num < obj_data->count_surfaces; ++surface_num) {
-            for (int point_num = 0; point_num < obj_data->surfaces->count_points; ++point_num) {
-                fprintf(file, "%f %f %f\n",
+            for (int point_num = 0; point_num < obj_data->surfaces[surface_num].count_points; ++point_num) {
+                fprintf(file, "%lf %lf %lf\n",
                         obj_data->points[obj_data->surfaces[surface_num].points[point_num]].x,
                         obj_data->points[obj_data->surfaces[surface_num].points[point_num]].y,
                         obj_data->points[obj_data->surfaces[surface_num].points[point_num]].z
