@@ -16,4 +16,9 @@
     font-weight: normal;
 }
 
+.file_characteristics_label {
+    color: #807f7f;
+    font-size: 13px;
+}
+
 .input_mode_button {}
