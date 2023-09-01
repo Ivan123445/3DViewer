@@ -37,9 +37,12 @@ static void init_work_mode_buttons(GtkBuilder *builder, gulong *signals_id) {
     g_signal_handler_unblock(scaling_toggle_button, signals_id[scaling_signal]);
 }
 
-static void init_folder_to_save(GtkBuilder *builder) {
+static void init_filechoosers_folder(GtkBuilder *builder) {
     GtkFileChooser *save_image_gif_folder_chooser = (GtkFileChooser *) gtk_builder_get_object(builder, "Save_image_folder_chooser_button");
     gtk_file_chooser_set_filename(save_image_gif_folder_chooser, INITIAL_FOLDER_TO_SAVE);
+
+    GtkFileChooser *obj_file_chooser = (GtkFileChooser *) gtk_builder_get_object(builder, "File_chooser_widget");
+    gtk_file_chooser_set_current_folder(obj_file_chooser, INITIAL_FOLDER_TO_OBJ);
 }
 
 status_t apply_initial_settings(GPtrArray *data) {
@@ -49,5 +52,5 @@ status_t apply_initial_settings(GPtrArray *data) {
     init_input_mode_buttons(builder, signals_id);
     init_work_mode_buttons(builder, signals_id);
 
-    init_folder_to_save(builder);
+    init_filechoosers_folder(builder);
 }

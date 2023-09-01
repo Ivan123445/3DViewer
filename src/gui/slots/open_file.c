@@ -27,6 +27,7 @@ void open_file(GtkWidget *chooser, GPtrArray *data) {
 
     GtkLabel *file_name_label = (GtkLabel *)gtk_builder_get_object(builder, "File_name_label");
     GtkLabel *file_characteristics_label = (GtkLabel *)gtk_builder_get_object(builder, "File_characteristics_label");
+    GtkFileChooser *obj_file_chooser = (GtkFileChooser *) gtk_builder_get_object(builder, "File_chooser_widget");
     GtkWidget *control_visibility_grid = (GtkWidget *) gtk_builder_get_object(builder, "Control_visibility_grid");
     GtkWidget *additional_settings_grid = (GtkWidget *) gtk_builder_get_object(builder, "Additional_settings_grid");
     GtkImage *image = (GtkImage *)gtk_builder_get_object(builder, "Model_image");
@@ -41,7 +42,7 @@ void open_file(GtkWidget *chooser, GPtrArray *data) {
         gtk_label_set_label(file_name_label, get_filename_position(file_path));
         characteristics = get_file_characteristics(obj_data);
         gtk_label_set_label(file_characteristics_label, characteristics);
-
+        gtk_file_chooser_set_current_folder(obj_file_chooser, INITIAL_FOLDER_TO_OBJ);
         free(characteristics);
         render(image, obj_data);
     } else {
