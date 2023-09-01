@@ -1,30 +1,35 @@
 #include "../../s21_3dviewer.h"
 
-void *record_gif(void *data) {
+int record_gif(void *data) {
     GPtrArray *gdata = data;
     GtkWidget *save_gif_button = gdata->pdata[0];
     char *gif_filepath = gdata->pdata[1];
-    gtk_widget_set_sensitive(GTK_WIDGET(save_gif_button), FALSE);
-    MagickWandGenesis();
-    MagickWand * wand;
-    wand = NewMagickWand();
-    char seconds_str[3];
-    for (int seconds = SECONDS_IN_GIF; seconds > 0; --seconds) {
-        sprintf(seconds_str, "%d", seconds);
-        gtk_button_set_label(GTK_BUTTON(save_gif_button), seconds_str);
+    static int seconds = SECONDS_IN_GIF;
+    static MagickWand * wand;
 
-        MagickReadImage(wand, RENDERED_IMAGE_FILE);
-
-        sleep(1);
+    if (seconds == SECONDS_IN_GIF) {
+        gtk_widget_set_sensitive(GTK_WIDGET(save_gif_button), FALSE);
+        wand = NewMagickWand();
+        MagickWandGenesis();
     }
 
-    MagickWriteImages(wand, gif_filepath, MagickTrue);
-    MagickWandTerminus();
-    gtk_button_set_label(GTK_BUTTON(save_gif_button), "Save gif\0");
-    gtk_widget_set_sensitive(GTK_WIDGET(save_gif_button), TRUE);
+    char seconds_str[2];
+    sprintf(seconds_str, "%d", seconds);
+    gtk_button_set_label(GTK_BUTTON(save_gif_button), seconds_str);
 
-    free(gif_filepath);
-    pthread_exit(NULL);
+    MagickReadImage(wand, RENDERED_IMAGE_FILE);
+    seconds--;
+    if (seconds == -1) {
+        printf("%s\n", gif_filepath);
+        MagickWriteImages(wand, gif_filepath, MagickTrue);
+        MagickWandTerminus();
+        gtk_button_set_label(GTK_BUTTON(save_gif_button), "Save gif\0");
+        gtk_widget_set_sensitive(GTK_WIDGET(save_gif_button), TRUE);
+        free(gif_filepath);
+        seconds = SECONDS_IN_GIF;
+        return G_SOURCE_REMOVE;
+    }
+    return G_SOURCE_CONTINUE;
 }
 
 void save_gif(GtkWidget *button, GtkWidget *folder_chooser) {
@@ -32,10 +37,8 @@ void save_gif(GtkWidget *button, GtkWidget *folder_chooser) {
     g_ptr_array_add(data, button);
 
     gchar *recording_folder = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(folder_chooser));
-    char *recording_file = generate_filepath(recording_folder, SAVE_GIF_NAME, TRUE);
-    g_ptr_array_add(data, recording_file);
+    char *gif_filepath = generate_filepath(recording_folder, SAVE_GIF_NAME, TRUE);
+    g_ptr_array_add(data, gif_filepath);
 
-    pthread_t thread_id;
-    pthread_create(&thread_id, NULL, record_gif, data);
-    pthread_detach(thread_id);
+    g_timeout_add_seconds(1, record_gif, data);
 }

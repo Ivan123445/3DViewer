@@ -40,11 +40,10 @@
 #define ROTATE_MULTIPLIER   4
 
 // Additional settings
-#define INITIAL_FOLDER_TO_SAVE "../misc/"
+#define INITIAL_FOLDER_TO_SAVE "../temp/"
 #define SAVE_IMAGE_NAME        "3DV_image"
 #define SAVE_GIF_NAME          "3DV_gif"
-
-#define SECONDS_IN_GIF         3
+#define SECONDS_IN_GIF         5
 
 // Messages
 #define OPEN_GLADE_FILE_ERR_MSG       "Unable to load glade file:"
