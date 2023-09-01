@@ -20,6 +20,8 @@ include_directories(${ImageMagick_INCLUDE_DIRS})
 target_link_libraries(3DViewer ${GTK3_LIBRARIES})
 target_link_libraries(tests ${GTK3_LIBRARIES} check)
 
+add_definitions( -DMAGICKCORE_QUANTUM_DEPTH=16 )
+add_definitions( -DMAGICKCORE_HDRI_ENABLE=0 )
 
 if (UNIX)
     target_link_libraries(3DViewer subunit m)
