@@ -10,4 +10,4 @@
 Suite *affine_transformation_suite();
 Suite *parse_file_suite();
 
-#endif //INC_3DVIEWER_TESTS_H
+#endif  // INC_3DVIEWER_TESTS_H

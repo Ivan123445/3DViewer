@@ -1,13 +1,13 @@
 #ifndef INC_3DVIEWER_S21_3DVIEWER_H
 #define INC_3DVIEWER_S21_3DVIEWER_H
 
+#include <fcntl.h>
 #include <gtk/gtk.h>
-#include <stdlib.h>
 #include <math.h>
+#include <pthread.h>
+#include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <pthread.h>
-#include <fcntl.h>
 #include <wand/MagickWand.h>
 
 // UI
@@ -41,32 +41,28 @@
 #define ROTATE_MULTIPLIER 4
 
 // Additional settings
-#define INITIAL_FOLDER_TO_SAVE "../temp/"
-#define SAVE_IMAGE_NAME        "3DV_image"
-#define SAVE_GIF_NAME          "3DV_gif"
-#define SECONDS_IN_GIF         5
+#define INITIAL_FOLDER_TO_SAVE "./temp/"
+#define SAVE_IMAGE_NAME "3DV_image"
+#define SAVE_GIF_NAME "3DV_gif"
+#define SECONDS_IN_GIF 5
 
 // Messages
-#define OPEN_GLADE_FILE_ERR_MSG       "Unable to load glade file:"
-#define OPEN_CSS_FILE_ERR_MSG         "Unable to load css file:"
+#define OPEN_GLADE_FILE_ERR_MSG "Unable to load glade file:"
+#define OPEN_CSS_FILE_ERR_MSG "Unable to load css file:"
 #define GETTING_WINDOW_WIDGET_ERR_MSG "Error getting the window widget"
-#define MODEL_FILE_FORMAT_ERR_MSG     "Model file format error"
+#define MODEL_FILE_FORMAT_ERR_MSG "Model file format error"
 
 typedef enum status {
-    OK,
-    OPEN_FILE_ERR,
-    FORMAT_FILE_ERR,
-    ALLOC_ERR,
-    OPEN_RENDER_FILE_ERR,
-    PIPE_OPEN_ERR,
-    WRONG_BUTTON_ERR
+  OK,
+  OPEN_FILE_ERR,
+  FORMAT_FILE_ERR,
+  ALLOC_ERR,
+  OPEN_RENDER_FILE_ERR,
+  PIPE_OPEN_ERR,
+  WRONG_BUTTON_ERR
 } status_t;
 
-typedef enum work_mode {
-    moving_mode,
-    rotation_mode,
-    scaling_mode
-} work_mode_t;
+typedef enum work_mode { moving_mode, rotation_mode, scaling_mode } work_mode_t;
 
 typedef enum signals_id_indexes {
   moving_signal,
@@ -77,29 +73,29 @@ typedef enum signals_id_indexes {
 } signals_id_indexes_t;
 
 typedef struct coordinates {
-    double x;
-    double y;
-    double z;
+  double x;
+  double y;
+  double z;
 } coordinates_t;
 
 typedef struct surface {
-    unsigned short count_points;
-    unsigned short *points;
+  unsigned short count_points;
+  unsigned short *points;
 } surface_t;
 
 typedef struct obj_data {
-    unsigned short graph_scale;
-    unsigned int count_points;
-    coordinates_t *points;
-    unsigned int count_surfaces;
-    surface_t *surfaces;
+  unsigned short graph_scale;
+  unsigned int count_points;
+  coordinates_t *points;
+  unsigned int count_surfaces;
+  surface_t *surfaces;
 } obj_data_t;
 
 // gui/slots
 void buttons_change_display(GtkWidget *button, GPtrArray *data);
 void change_input_mode(GtkWidget *toggle_button, GPtrArray *data);
 void change_work_mode(GtkWidget *toggle_button, GPtrArray *data);
-gboolean close_app(GtkWidget* window, GPtrArray *data);
+gboolean close_app(GtkWidget *window, GPtrArray *data);
 void save_gif(GtkWidget *button, GtkWidget *folder_chooser);
 void entrys_change_display(GtkWidget *button, GPtrArray *data);
 status_t apply_initial_settings(GPtrArray *data);
@@ -117,4 +113,4 @@ void move(obj_data_t *data, coordinates_t coord);
 void scale(obj_data_t *data, coordinates_t coord);
 status_t rotate(obj_data_t *data, coordinates_t coord);
 
-#endif //INC_3DVIEWER_S21_3DVIEWER_H
+#endif  // INC_3DVIEWER_S21_3DVIEWER_H
