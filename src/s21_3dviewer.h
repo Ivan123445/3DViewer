@@ -11,14 +11,14 @@
 #include <wand/MagickWand.h>
 
 // UI
-#define GLADE_FILE "../src/gui/3dviewer.glade"
-#define CSS_FILE   "../src/gui/common.css"
-#define ICON_FILE  "../misc/icon.png"
+#define GLADE_FILE "./src/gui/3dviewer.glade"
+#define CSS_FILE "./src/gui/common.css"
+#define ICON_FILE "../misc/icon.png"
 
 // Render
-#define DATA_FOR_RENDER_FILE    "/tmp/$render_data.txt"
-#define RENDERED_IMAGE_FILE     "/tmp/$graph.png"
-#define ERROR_IMAGE             "../misc/error_image.png"
+#define DATA_FOR_RENDER_FILE "/tmp/$render_data.txt"
+#define RENDERED_IMAGE_FILE "/tmp/$graph.png"
+#define ERROR_IMAGE "../misc/error_image.png"
 #define GNUPLOT_SCRIPT \
   "set output '%s'\n                   \
   set terminal pngcairo size %d,%d\n    \
@@ -30,15 +30,15 @@
   splot [-%d:%d][-%d:%d][-%d:%d] '%s' notitle with polygons fs transparent solid 0.8 fc \"gray\"\n"
 
 // Control visibility
-#define INITIAL_FOLDER_TO_OBJ "../semples/"
-#define INITIAL_WORK_MODE     moving_mode
-#define INITIAL_INPUT_MODE    1  // 1 - controller, 2 - coordinates
-#define INITIAL_GRAPH_SCALE   10
-#define GRAPH_SCALE_STEP      1
-#define AXIS_BUTTONS_STEP     1
-#define MOVE_MULTIPLIER       1
-#define SCALE_MULTIPLIER      0.1
-#define ROTATE_MULTIPLIER     4
+#define INITIAL_FOLDER_TO_OBJ "./semples/"
+#define INITIAL_WORK_MODE moving_mode
+#define INITIAL_INPUT_MODE 1  // 1 - controller, 2 - coordinates
+#define INITIAL_GRAPH_SCALE 10
+#define GRAPH_SCALE_STEP 1
+#define AXIS_BUTTONS_STEP 1
+#define MOVE_MULTIPLIER 1
+#define SCALE_MULTIPLIER 0.1
+#define ROTATE_MULTIPLIER 4
 
 // Additional settings
 #define INITIAL_FOLDER_TO_SAVE "../temp/"

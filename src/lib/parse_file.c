@@ -84,20 +84,22 @@ static status_t get_obj_data (gchar *filename, obj_data_t *obj_data) {
         status = OPEN_FILE_ERR;
     }
 
-    if (status == OK) {
-        gchar *str = NULL;
-        size_t n = 0;
-        for (int point_num = 0, surface_num = 0; status == OK && getline(&str, &n, file) != -1;) {
-            if (str[0] == 'v' && str[1] == ' ') {
-                replace_symb(str, '.', ',');
-                status = scan_point(str, &obj_data->points[point_num]);
-                point_num++;
-            } else if (str[0] == 'f' && str[1] == ' ') {
-                status = scan_surface(str, &obj_data->surfaces[surface_num]);
-                surface_num++;
-            }
-        }
+  if (status == OK) {
+    gchar *str = NULL;
+    size_t n = 0;
+    for (int point_num = 0, surface_num = 0;
+         status == OK && getline(&str, &n, file) != -1;) {
+      if (str[0] == 'v' && str[1] == ' ') {
+        replace_symb(str, '.', ',');
+        status = scan_point(str, &obj_data->points[point_num]);
+        point_num++;
+      } else if (str[0] == 'f' && str[1] == ' ') {
+        status = scan_surface(str, &obj_data->surfaces[surface_num]);
+        surface_num++;
+      }
     }
+    str ? free(str) : 0;
+  }
 
     return status;
 }
