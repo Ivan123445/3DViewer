@@ -7,20 +7,20 @@ START_TEST(move_test) {
       parse_file("../src/tests/test_files/ten_points_five_surface.obj", &data);
   ck_assert_int_eq(result_code, OK);
 
-  //  for (int num_points = 0; num_points < 9; ++num_points) {
-  //    ck_assert_double_eq(data.points[num_points].x, num_points + 1);
-  //    ck_assert_double_eq(data.points[num_points].y, num_points + 1);
-  //    ck_assert_double_eq(data.points[num_points].z, num_points + 1);
-  //  }
+  for (int num_points = 0; num_points < 9; ++num_points) {
+    ck_assert_double_eq(data.points[num_points].x, num_points + 1);
+    ck_assert_double_eq(data.points[num_points].y, num_points + 1);
+    ck_assert_double_eq(data.points[num_points].z, num_points + 1);
+  }
 
-  //  coordinates_t move_offset = {-1, -1, -1};
-  //  move(&data, move_offset);
-  //
-  //  for (int num_points = 0; num_points < 9; ++num_points) {
-  //    ck_assert_double_eq(data.points[num_points].x, num_points);
-  //    ck_assert_double_eq(data.points[num_points].y, num_points);
-  //    ck_assert_double_eq(data.points[num_points].z, num_points);
-  //  }
+  coordinates_t move_offset = {-1, -1, -1};
+  move(&data, move_offset);
+
+  for (int num_points = 0; num_points < 9; ++num_points) {
+    ck_assert_double_eq(data.points[num_points].x, num_points);
+    ck_assert_double_eq(data.points[num_points].y, num_points);
+    ck_assert_double_eq(data.points[num_points].z, num_points);
+  }
 
   free_obj_data(&data);
 }
